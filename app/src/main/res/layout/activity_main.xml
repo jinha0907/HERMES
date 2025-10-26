@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="16dp"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/etHost"
+        android:hint="MQTT 주소 (예: tcp://192.168.0.10:1883)"
+        android:autofillHints=""
+        android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etUser"
+        android:hint="사용자(옵션)"
+        android:autofillHints=""
+        android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etPass"
+        android:hint="비밀번호(옵션)"
+        android:inputType="textPassword"
+        android:autofillHints=""
+        android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnOpenPermission"
+        android:text="알림 접근 설정 열기"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:text="MQTT 연결"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
+    <TextView
+        android:id="@+id/tvStatus"
+        android:text="연결 상태"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
+</LinearLayout>
