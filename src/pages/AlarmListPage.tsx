@@ -5,9 +5,34 @@ import toast, { Toaster } from "react-hot-toast";
 type Alarm = {
   id: number;
   title: string;
-  time: string;
+  text: string;
+  posted_at_utc?: string;
+  received_at?: number;
   summary?: string;
 };
+
+function formatRelativeTime(timestamp?: number): string {
+  if (!timestamp) return "";
+
+  const now = new Date();
+  const received = new Date(timestamp);
+  const diffMs = now.getTime() - received.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffSec < 60) return "방금 전";
+  if (diffMin < 60) return `${diffMin}분 전`;
+  if (diffHour < 24) return `${diffHour}시간 전`;
+  if (diffDay < 7) return `${diffDay}일 전`;
+
+  // 7일 이상은 날짜 표시
+  return received.toLocaleDateString("ko-KR", {
+    month: "short",
+    day: "numeric",
+  });
+}
 
 const AlarmListPage = () => {
   const [alarms, setAlarms] = useState<Alarm[]>([]);
@@ -89,7 +114,11 @@ const AlarmListPage = () => {
             >
               <div className="flex-1 pr-4">
                 <p className="text-3xl font-semibold">{alarm?.summary}</p>
-                <p className="text-xl text-gray-300 mt-2">{alarm.time}</p>
+                <p className="text-xl text-gray-300 mt-2">
+                  <p className="text-xl text-gray-300 mt-2">
+                    {formatRelativeTime(alarm.received_at)}
+                  </p>
+                </p>
               </div>
 
               {/* 🔹 삭제 버튼 */}
