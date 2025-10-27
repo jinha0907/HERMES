@@ -81,7 +81,7 @@ const AlarmDetailPage = () => {
       />
 
       <h2 className="text-4xl font-extrabold mb-10 text-center">
-        알림 {alarm.id} 상세보기
+        알림 상세보기
       </h2>
 
       <div className="bg-gray-700 p-8 rounded-3xl shadow-xl flex-1 space-y-8 text-left">

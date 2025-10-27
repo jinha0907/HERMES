@@ -34,6 +34,31 @@ const SettingsPage = () => {
     }
   };
 
+  // 🔹 DND 설정 전송 함수
+  const handleDndSubmit = async () => {
+    setSending(true);
+    setStatusMsg("서버에 전송 중...");
+
+    try {
+      const res = await fetch("http://localhost:8080/speaker/dnd", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dndStart, dndEnd }),
+      });
+
+      if (!res.ok) throw new Error("서버 응답 오류");
+      const data = await res.json();
+      console.log("[DND API Response]", data);
+      setStatusMsg(`⏰ 방해금지 시간 설정 완료: ${dndStart} ~ ${dndEnd}`);
+    } catch (err) {
+      console.error(err);
+      setStatusMsg("⚠️ 서버 연결 실패");
+    } finally {
+      setSending(false);
+      setTimeout(() => setStatusMsg(""), 2500);
+    }
+  };
+
   return (
     <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-10 flex flex-col">
       {/* 제목 */}
@@ -87,11 +112,21 @@ const SettingsPage = () => {
         {statusMsg && <p className="mt-2 text-xl text-gray-400">{statusMsg}</p>}
       </div>
 
-      {/* 뒤로 가기 버튼 */}
-      <div className="mt-auto">
+      {/* 하단 버튼 영역 */}
+      <div className="mt-auto flex justify-between gap-6">
+        {/* DND 설정 적용 버튼 */}
+        <button
+          onClick={handleDndSubmit}
+          disabled={sending}
+          className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-2xl font-bold py-6 rounded-2xl transition"
+        >
+          DND 설정 적용
+        </button>
+
+        {/* 뒤로 가기 버튼 */}
         <Link
           to="/"
-          className="block text-center bg-blue-600 hover:bg-blue-700 py-6 rounded-2xl text-2xl font-bold"
+          className="flex-1 text-center bg-blue-600 hover:bg-blue-700 py-6 rounded-2xl text-2xl font-bold transition"
         >
           뒤로 가기
         </Link>
