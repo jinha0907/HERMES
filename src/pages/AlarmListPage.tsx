@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 type Alarm = {
@@ -13,6 +13,7 @@ const AlarmListPage = () => {
   const [alarms, setAlarms] = useState<Alarm[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const navigate = useNavigate(); // ✅ 상세 페이지 이동용 hook
 
   // 🔹 알림 목록 불러오기
   useEffect(() => {
@@ -83,16 +84,20 @@ const AlarmListPage = () => {
           alarms.map((alarm) => (
             <div
               key={alarm.id}
-              className="bg-gray-700 rounded-2xl p-6 flex justify-between items-center shadow-lg"
+              className="bg-gray-700 rounded-2xl p-6 flex justify-between items-center shadow-lg hover:bg-gray-600 transition cursor-pointer"
+              onClick={() => navigate(`/alarms/${alarm.id}`)} // ✅ 클릭 시 상세 페이지 이동
             >
               <div className="flex-1 pr-4">
-                <p className="text-3xl font-semibold">{alarm.title}</p>
+                <p className="text-3xl font-semibold">{alarm?.summary}</p>
                 <p className="text-xl text-gray-300 mt-2">{alarm.time}</p>
               </div>
 
               {/* 🔹 삭제 버튼 */}
               <button
-                onClick={() => openDeleteModal(alarm.id)}
+                onClick={(e) => {
+                  e.stopPropagation(); // ✅ 클릭 버블링 방지 (삭제 시 페이지 이동 안 되게)
+                  openDeleteModal(alarm.id);
+                }}
                 className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-2xl font-bold"
               >
                 삭제
