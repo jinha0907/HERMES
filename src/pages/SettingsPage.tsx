@@ -43,7 +43,7 @@ const SettingsPage = () => {
       const res = await fetch("http://localhost:8080/speaker/dnd", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dndStart, dndEnd }),
+        body: JSON.stringify({ dndStart: dndStart, dndEnd: dndEnd }),
       });
 
       if (!res.ok) throw new Error("서버 응답 오류");
