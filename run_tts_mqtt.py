@@ -16,12 +16,22 @@ def on_connect(client, userdata, flags, rc):
 
 def _handle_text(msg):
     try:
-        text = msg.payload.decode("utf-8")
+        payload = msg.payload.decode("utf-8")
+        try:
+            data = json.loads(payload)
+            if isinstance(data, dict) and "text" in data:
+                text = data["text"]
+            else:
+                text = payload
+        except json.JSONDecodeError:
+            text = payload
     except Exception as e:
         print("[MQTT][TEXT] Decode error:", e)
         return
+
     print("[MQTT][TEXT] Received:", text)
     speak(text)
+
 
 def _handle_volume(msg):
     try:
