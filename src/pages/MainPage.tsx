@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useSeoulWeather } from "../hooks/useSeoulWeather";
 
 type Alarm = {
   id: number;
@@ -12,6 +13,7 @@ type Alarm = {
 const MainPage = () => {
   const [alarms, setAlarms] = useState<Alarm[]>([]);
   const [loading, setLoading] = useState(true);
+  const { weather, loading: weatherLoading } = useSeoulWeather();
 
   useEffect(() => {
     fetch("http://localhost:8080/app-notif?limit=4")
@@ -48,17 +50,22 @@ const MainPage = () => {
       <div className="grid grid-cols-2 gap-4 flex-none">
         {/* 날씨 박스 + 로고 */}
         <div className="flex flex-col items-center justify-center bg-gray-700 rounded-2xl p-6 shadow-lg space-y-6">
-          <div className="flex justify-center gap-4 w-full">
-            <div className="flex items-center space-x-3">
-              <span className="text-5xl">🌤</span>
-              <div>
-                <p className="text-2xl font-bold">흐림</p>
-                <p className="text-xl">17℃ / 9℃</p>
+          {weatherLoading || !weather ? (
+            <p className="text-3xl text-gray-400">날씨 불러오는 중…</p>
+          ) : (
+            <div className="flex justify-center gap-4 w-full">
+              <div className="flex items-center space-x-3">
+                <span className="text-5xl">🌤</span>
+                <div>
+                  <p className="text-2xl font-bold">{weather?.summary}</p>
+                  <p className="text-xl">{Math.round(weather?.temperature)}℃</p>
+                </div>
               </div>
+              <p className="text-4xl font-extrabold ml-6">
+                {Math.round(weather.temperature)}℃
+              </p>
             </div>
-            <p className="text-4xl font-extrabold ml-6">12℃</p>
-          </div>
-
+          )}
           <div className="flex flex-col items-center text-center">
             <p className="text-3xl font-extrabold tracking-widest">HERMES</p>
           </div>
