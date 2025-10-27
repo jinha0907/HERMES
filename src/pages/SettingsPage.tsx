@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const SettingsPage = () => {
-  const [volume, setVolume] = useState(80);
-  const [dndStart, setDndStart] = useState("22:00");
-  const [dndEnd, setDndEnd] = useState("07:00");
+  const [volume, setVolume] = useState<number | null>(null);
+  const [dndStart, setDndStart] = useState<string>("");
+  const [dndEnd, setDndEnd] = useState<string>("");
   const [sending, setSending] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
 
@@ -112,28 +112,36 @@ const SettingsPage = () => {
               className="p-4 text-2xl text-black rounded-xl"
             />
           </div>
-          <p className="text-3xl">
-            현재 설정:{" "}
-            <span className="font-bold text-green-400">
-              {dndStart} ~ {dndEnd}
-            </span>
-          </p>
+          {dndStart && dndEnd && (
+            <p className="text-3xl">
+              현재 설정:{" "}
+              <span className="font-bold text-green-400">
+                {dndStart} ~ {dndEnd}
+              </span>
+            </p>
+          )}
         </div>
       </div>
 
       {/* 볼륨 조절 */}
       <div className="mb-12">
         <h3 className="text-3xl font-bold mb-4">🔊 볼륨 조절</h3>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={volume}
-          onChange={(e) => handleVolumeChange(Number(e.target.value))}
-          className="w-full h-4 accent-blue-500 cursor-pointer"
-          disabled={sending}
-        />
-        <p className="mt-4 text-2xl">현재 볼륨: {volume}%</p>
+        {volume !== null ? (
+          <>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={volume}
+              onChange={(e) => handleVolumeChange(Number(e.target.value))}
+              className="w-full h-4 accent-blue-500 cursor-pointer"
+              disabled={sending}
+            />
+            <p className="mt-4 text-2xl">현재 볼륨: {volume}%</p>
+          </>
+        ) : (
+          <p className="text-2xl text-gray-400">불러오는 중...</p>
+        )}
         {statusMsg && <p className="mt-2 text-xl text-gray-400">{statusMsg}</p>}
       </div>
 
