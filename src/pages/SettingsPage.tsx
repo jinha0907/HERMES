@@ -3,8 +3,36 @@ import { useState } from "react";
 
 const SettingsPage = () => {
   const [volume, setVolume] = useState(80);
-  const [dndStart, setDndStart] = useState("22:00"); // 기본값 23시
-  const [dndEnd, setDndEnd] = useState("07:00"); // 기본값 07시
+  const [dndStart, setDndStart] = useState("22:00");
+  const [dndEnd, setDndEnd] = useState("07:00");
+  const [sending, setSending] = useState(false);
+  const [statusMsg, setStatusMsg] = useState("");
+
+  // 🔊 서버로 볼륨 전송
+  const handleVolumeChange = async (newVolume: number) => {
+    setVolume(newVolume);
+    setSending(true);
+    setStatusMsg("서버에 전송 중...");
+
+    try {
+      const res = await fetch("http://localhost:8080/speaker/volume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ volume: newVolume }),
+      });
+
+      if (!res.ok) throw new Error("서버 응답 오류");
+      const data = await res.json();
+      console.log("[Volume API Response]", data);
+      setStatusMsg(`서버에 볼륨 ${newVolume}% 설정 완료`);
+    } catch (err) {
+      console.error(err);
+      setStatusMsg("⚠️ 서버 연결 실패");
+    } finally {
+      setSending(false);
+      setTimeout(() => setStatusMsg(""), 2500);
+    }
+  };
 
   return (
     <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-10 flex flex-col">
@@ -19,7 +47,6 @@ const SettingsPage = () => {
         </p>
 
         <div className="flex items-center gap-20">
-          {/* 시간 선택 */}
           <div className="flex items-center gap-6">
             <input
               type="time"
@@ -35,8 +62,6 @@ const SettingsPage = () => {
               className="p-4 text-2xl text-black rounded-xl"
             />
           </div>
-
-          {/* 현재 설정 */}
           <p className="text-3xl">
             현재 설정:{" "}
             <span className="font-bold text-green-400">
@@ -54,10 +79,12 @@ const SettingsPage = () => {
           min="0"
           max="100"
           value={volume}
-          onChange={(e) => setVolume(Number(e.target.value))}
+          onChange={(e) => handleVolumeChange(Number(e.target.value))}
           className="w-full h-4 accent-blue-500 cursor-pointer"
+          disabled={sending}
         />
         <p className="mt-4 text-2xl">현재 볼륨: {volume}%</p>
+        {statusMsg && <p className="mt-2 text-xl text-gray-400">{statusMsg}</p>}
       </div>
 
       {/* 뒤로 가기 버튼 */}

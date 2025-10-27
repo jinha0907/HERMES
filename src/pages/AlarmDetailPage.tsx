@@ -1,13 +1,62 @@
 import { Link, useParams } from "react-router-dom";
-import { dummyAlarms } from "../data/dummyAlarms";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+
+type Alarm = {
+  id: number;
+  title: string;
+  text: string;
+  posted_at_utc?: string;
+  received_at?: number;
+  summary?: string;
+};
 
 const AlarmDetailPage = () => {
   const { id } = useParams();
-  const alarm = dummyAlarms.find((a) => a.id === id);
-
+  const [alarm, setAlarm] = useState<Alarm | null>(null);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+
+    fetch(`http://localhost:8080/app-notif`)
+      .then((res) => res.json())
+      .then((data: Alarm[]) => {
+        const found = data.find((a) => String(a.id) === id);
+        setAlarm(found || null);
+      })
+      .catch((err) => console.error("Error fetching alarm:", err))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  const handleDelete = () => {
+    if (!alarm) return;
+    fetch(`http://localhost:8080/app-notif/${alarm.id}`, { method: "DELETE" })
+      .then((res) => res.json())
+      .then(() => {
+        toast.success("✅ 알림이 삭제되었습니다.", {
+          style: {
+            fontSize: "1.5rem",
+            padding: "20px",
+            minWidth: "400px",
+            textAlign: "center",
+          },
+          duration: 3000,
+        });
+        setTimeout(() => (window.location.href = "/alarms"), 1500);
+      })
+      .catch((err) => console.error("Error deleting:", err))
+      .finally(() => setShowModal(false));
+  };
+
+  if (loading) {
+    return (
+      <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white flex items-center justify-center text-3xl">
+        불러오는 중...
+      </div>
+    );
+  }
 
   if (!alarm) {
     return (
@@ -23,48 +72,37 @@ const AlarmDetailPage = () => {
     );
   }
 
-  const handleDelete = () => {
-    setShowModal(false); // 모달 닫기
-    toast.success("✅ 알림이 삭제되었습니다.", {
-      style: {
-        fontSize: "1.5rem",
-        padding: "20px",
-        minWidth: "400px",
-        textAlign: "center",
-      },
-      duration: 3000,
-    });
-  };
-
   return (
     <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-12 flex flex-col relative">
-      {/* Toaster: 토스트 표시 (상단에서 조금 더 떨어짐) */}
       <Toaster
         position="top-center"
         reverseOrder={false}
-        containerStyle={{
-          marginTop: "30px",
-        }}
+        containerStyle={{ marginTop: "30px" }}
       />
 
-      {/* 제목 */}
       <h2 className="text-4xl font-extrabold mb-10 text-center">
         알림 {alarm.id} 상세보기
       </h2>
 
-      {/* 알림 상세 카드 */}
       <div className="bg-gray-700 p-8 rounded-3xl shadow-xl flex-1 space-y-8 text-left">
         <p className="text-4xl">
           <strong className="text-blue-400">제목: </strong>
           {alarm.title}
         </p>
         <p className="text-3xl">
-          <strong className="text-blue-400">수신 시각: </strong>
-          {alarm.time}
+          <strong className="text-blue-400">내용: </strong>
+          {alarm.text || "내용 없음"}
+        </p>
+        <p className="text-2xl text-gray-300">
+          <strong>요약: </strong>
+          {alarm.summary || "요약 없음"}
+        </p>
+        <p className="text-2xl text-gray-400">
+          <strong>수신 시각: </strong>
+          {new Date(alarm.received_at || 0).toLocaleString()}
         </p>
       </div>
 
-      {/* 하단 버튼 */}
       <div className="flex justify-between mt-12 space-x-6">
         <Link
           to="/alarms"
@@ -80,7 +118,6 @@ const AlarmDetailPage = () => {
         </button>
       </div>
 
-      {/* 삭제 확인 모달 */}
       {showModal && (
         <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
           <div className="bg-gray-800 p-12 rounded-2xl shadow-2xl text-center w-[480px]">
