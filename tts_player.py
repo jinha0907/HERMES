@@ -1,52 +1,47 @@
 # tts_player.py
-import os
-from google.cloud import texttospeech
+import numpy as np
+import wave
 import subprocess
 import tempfile
+from google.cloud import texttospeech
+import config
 
-# Google 인증 키 JSON 경로 (환경변수에 미리 설정하는 게 안전)
-# 예: ~/.bashrc 에 추가
-# export GOOGLE_APPLICATION_CREDENTIALS="/home/pi/google_tts_key.json"
+client = texttospeech.TextToSpeechClient()
+
+def text_to_pcm(text: str):
+    """Google TTS 호출 → PCM16 numpy 배열 반환"""
+    synthesis_input = texttospeech.SynthesisInput(text=text)
+    voice = texttospeech.VoiceSelectionParams(
+        language_code=config.VOICE_LANG,
+        name=config.VOICE_NAME,
+    )
+    audio_config = texttospeech.AudioConfig(
+        audio_encoding=texttospeech.AudioEncoding.LINEAR16,
+        sample_rate_hertz=24000, 
+    )
+
+    response = client.synthesize_speech(
+        input=synthesis_input, voice=voice, audio_config=audio_config
+    )
+    pcm16 = np.frombuffer(response.audio_content, dtype=np.int16)
+    return pcm16
+
+
+def play_pcm(pcm16: np.ndarray):
+    """PCM16 → 임시 WAV 저장 후 ALSA로 재생 (유선 AUX 출력)"""
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+        wav_path = f.name
+        with wave.open(wav_path, "wb") as wf:
+            wf.setnchannels(1)        # 모노
+            wf.setsampwidth(2)        # 16bit
+            wf.setframerate(24000)    # 24kHz
+            wf.writeframes(pcm16.tobytes())
+
+    # 유선 출력: card 0, device 0 (bcm2835 Headphones)
+    subprocess.run(["aplay", "-D", "hw:0,0", "-r", "24000", wav_path])
+
 
 def speak(text: str):
-    """
-    Google Cloud TTS를 이용해 텍스트를 음성으로 변환하고 재생
-    - text: 출력할 문자열
-    """
-    try:
-        # 클라이언트 초기화
-        client = texttospeech.TextToSpeechClient()
-
-        # 요청 설정
-        synthesis_input = texttospeech.SynthesisInput(text=text)
-
-        voice = texttospeech.VoiceSelectionParams(
-            language_code="ko-KR",   # 한국어
-            ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
-        )
-
-        audio_config = texttospeech.AudioConfig(
-            audio_encoding=texttospeech.AudioEncoding.LINEAR16,  # PCM (wav 호환)
-            speaking_rate=1.0
-        )
-
-        # 요청 보내기
-        response = client.synthesize_speech(
-            input=synthesis_input,
-            voice=voice,
-            audio_config=audio_config
-        )
-
-        # 임시 wav 파일 저장
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as out:
-            out.write(response.audio_content)
-            tmp_path = out.name
-
-        # aplay 로 재생 (라즈베리파이 기본 wav 플레이어)
-        subprocess.run(["aplay", "-q", tmp_path], check=False)
-
-        # 재생 후 파일 삭제
-        os.remove(tmp_path)
-
-    except Exception as e:
-        print("[TTS] Error:", e)
+    print(f"[TTS] {text}")
+    pcm16 = text_to_pcm(text)
+    play_pcm(pcm16)
