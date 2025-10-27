@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                     }
                     ConnState.CONNECTED -> {
                         connectBtn.isEnabled = true
-                        connectBtn.text = "연결됨"
+                        connectBtn.text = "연결됨(연결 해제시 클릭)"
                         tvStatus.text = "연결 완료"
                     }
                     ConnState.LOST -> {
@@ -79,6 +79,14 @@ class MainActivity : ComponentActivity() {
         }
 
         connectBtn.setOnClickListener {
+            val state = MqttClient.state.value
+
+            if (state == ConnState.CONNECTED) {
+                // 연결 해제
+                MqttClient.disconnect()
+                Toast.makeText(this, "MQTT 연결 해제됨", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val raw = hostEt.text.toString().trim()
             val user = userEt.text.toString().trim().ifEmpty { null }
             val pass = passEt.text.toString().trim().ifEmpty { null }
@@ -102,7 +110,6 @@ class MainActivity : ComponentActivity() {
                 return@setOnClickListener
             }
 
-            // 예외 가드: 어떤 예외도 앱을 죽이지 않게
             try {
                 MqttClient.configure(raw, user, pass)
                 MqttClient.ensureConnected(this) // 내부도 예외 가드 적용 필요

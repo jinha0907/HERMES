@@ -13,6 +13,13 @@ object Masking {
 
     // === 은행별 정밀 패턴 예시 (한국 주요 은행 사례 기반)
     // 주: 실제 은행별 패턴은 변동 가능. 자리수/하이픈 배치로 커버.
+
+    private val invalidKeywords = listOf(
+        "광고", "[AD]", "(AD)", "[광고]", "(광고)",
+        "(걸음)", "걸음", "[걸음]",
+        "[국외발신]", "국외발신", "국외",
+    )
+
     private val bankPatterns = listOf(
         // 국민은행 (KB) 예시: 3-2-(-)-7 등 다양한 포맷 존재 -> 몇가지 대표 포맷 추가
         Regex("""\b\d{2,3}-\d{2,6}-\d{2,7}\b"""), // e.g. 123-45-6789012
@@ -25,23 +32,28 @@ object Masking {
         // 농협(NH) : 3-2-? 등 변형
         Regex("""\b\d{3}-\d{2}-\d{7,8}\b"""),
         // 기업은행(IBK) : 3-6-? 등
-        Regex("""\b\d{3}-\d{6}-\d{1,4}\b""")
+        Regex("""\b\d{3}-\d{6}-\d{1,4}\b"""),
         // (더 많은 은행별 포맷을 필요시 추가)
     )
 
     // 범용 계좌번호 의심 패턴: 하이픈 포함 숫자 조합 또는 10~16자리 연속 숫자
     private val genericAccount = Regex("""\b(?:\d{2,4}[- ]?){2,5}\d{2,6}\b""")
     // 보다 엄격한 길이 기반 추가: 연속 숫자 10~16자리 (하이픈 없는 경우)
-    private val longNumeric = Regex("""\b\d{10,16}\b""")
+    private val longNumeric = Regex("""\b\d{5,30}\b""")
 
     fun mask_app(input: String): Boolean {
-        var app_name = input;
-        if(input.contains("kakao")){
+        val name = input.lowercase()
+        val category = "none"
+        if (AppDictionary.blockedApps.any { name.contains(it) }) return false
+        if (AppDictionary.categories.values.flatten().any { name.contains(it) }) return true
+        // 기본적으로 허용하지 않음
+        return false
+    }
 
-        } else if(input.contains("")){
-
-        }
-        return false;
+    // 광고/해외발신 등 필터링
+    fun containsInvalid(text: String): Boolean {
+        val lower = text.lowercase()
+        return invalidKeywords.any { lower.contains(it) }
     }
     fun mask(input: String): String {
         var s = input
@@ -67,14 +79,14 @@ object Masking {
             return s
         }
 
-        // 3) 문맥 없을 때는 오탐을 줄이기 위해 '엄격' 규칙부터 적용
+        // 3) 문맥 없을 때는 오탐을 줄이기  ` 위해 '엄격' 규칙부터 적용
         for (p in bankPatterns) {
-            s = s.replace(p, "****계좌****")
+            s = s.replace(p, "********")
         }
         // 그런 다음 범용 패턴(긴 숫자열) 적용하되,
         // 너무 짧거나 다른 유형과 겹치면 오탐 가능 -> 이미 전화/주민 마스킹 했으니 위험 줄음
-        s = s.replace(genericAccount, "****계좌****")
-        s = s.replace(longNumeric, "****계좌****")
+        s = s.replace(genericAccount, "********")
+        s = s.replace(longNumeric, "*******")
 
         return s
     }

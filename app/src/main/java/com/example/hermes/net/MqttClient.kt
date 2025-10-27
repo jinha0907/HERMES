@@ -81,6 +81,7 @@ object MqttClient {
         }
     }
 
+
     fun publishJson(topic: String, json: JSONObject) {
         val payload = json.toString()
         val connected = (::client.isInitialized && client.isConnected)
@@ -102,6 +103,30 @@ object MqttClient {
         }
     }
 
+    fun disconnect() {
+        try {
+            if (::client.isInitialized && client.isConnected) {
+                Log.i(TAG, "Disconnecting MQTT...")
+                client.disconnect(null, object : IMqttActionListener {
+                    override fun onSuccess(asyncActionToken: IMqttToken?) {
+                        Log.i(TAG, "MQTT disconnected successfully")
+                        _state.value = ConnState.IDLE
+                    }
+
+                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                        Log.w(TAG, "MQTT disconnect failed", exception)
+                        _state.value = ConnState.FAILED
+                    }
+                })
+            } else {
+                Log.i(TAG, "No active MQTT connection to disconnect.")
+                _state.value = ConnState.IDLE
+            }
+        } catch (t: Throwable) {
+            Log.e(TAG, "disconnect() fatal", t)
+            _state.value = ConnState.FAILED
+        }
+    }
     private fun flush() {
         while (::client.isInitialized && client.isConnected) {
             val pair = queue.poll() ?: break
