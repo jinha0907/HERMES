@@ -73,72 +73,74 @@ const AlarmDetailPage = () => {
   }
 
   return (
-    <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-12 flex flex-col relative">
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        containerStyle={{ marginTop: "30px" }}
-      />
+    <div className="h-full min-h-screen bg-gray-900">
+      <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-12 flex flex-col relative">
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          containerStyle={{ marginTop: "30px" }}
+        />
 
-      <h2 className="text-4xl font-extrabold mb-10 text-center">
-        알림 상세보기
-      </h2>
+        <h2 className="text-4xl font-extrabold mb-10 text-center">
+          알림 상세보기
+        </h2>
 
-      <div className="bg-gray-700 p-8 rounded-3xl shadow-xl flex-1 space-y-8 text-left">
-        <p className="text-4xl">
-          <strong className="text-blue-400">제목: </strong>
-          {alarm.title}
-        </p>
-        <p className="text-3xl">
-          <strong className="text-blue-400">내용: </strong>
-          {alarm.text || "내용 없음"}
-        </p>
-        <p className="text-2xl text-gray-300">
-          <strong>요약: </strong>
-          {alarm.summary || "요약 없음"}
-        </p>
-        <p className="text-2xl text-gray-400">
-          <strong>수신 시각: </strong>
-          {new Date(alarm.received_at || 0).toLocaleString()}
-        </p>
-      </div>
+        <div className="bg-gray-700 p-8 rounded-3xl shadow-xl flex-1 space-y-8 text-left">
+          <p className="text-4xl">
+            <strong className="text-blue-400">제목: </strong>
+            {alarm.title}
+          </p>
+          <p className="text-3xl">
+            <strong className="text-blue-400">내용: </strong>
+            {alarm.text || "내용 없음"}
+          </p>
+          <p className="text-2xl text-gray-300">
+            <strong>요약: </strong>
+            {alarm.summary || "요약 없음"}
+          </p>
+          <p className="text-2xl text-gray-400">
+            <strong>수신 시각: </strong>
+            {new Date(alarm.received_at || 0).toLocaleString()}
+          </p>
+        </div>
 
-      <div className="flex justify-between mt-12 space-x-6">
-        <Link
-          to="/alarms"
-          className="bg-blue-600 px-10 py-6 rounded-3xl text-2xl font-bold w-1/2 text-center"
-        >
-          뒤로 가기
-        </Link>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-red-600 px-10 py-6 rounded-3xl text-2xl font-bold w-1/2"
-        >
-          삭제
-        </button>
-      </div>
+        <div className="flex justify-between mt-12 space-x-6">
+          <Link
+            to="/alarms"
+            className="bg-blue-600 px-10 py-6 rounded-3xl text-2xl font-bold w-1/2 text-center"
+          >
+            뒤로 가기
+          </Link>
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-red-600 px-10 py-6 rounded-3xl text-2xl font-bold w-1/2"
+          >
+            삭제
+          </button>
+        </div>
 
-      {showModal && (
-        <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-          <div className="bg-gray-800 p-12 rounded-2xl shadow-2xl text-center w-[480px]">
-            <p className="text-3xl mb-10">정말 삭제하시겠습니까?</p>
-            <div className="flex justify-between gap-4">
-              <button
-                onClick={() => setShowModal(false)}
-                className="bg-gray-500 px-6 py-3 rounded-xl text-2xl font-bold w-1/2"
-              >
-                취소
-              </button>
-              <button
-                onClick={handleDelete}
-                className="bg-red-600 px-8 py-5 rounded-xl text-2xl font-bold w-1/2"
-              >
-                확인
-              </button>
+        {showModal && (
+          <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+            <div className="bg-gray-800 p-12 rounded-2xl shadow-2xl text-center w-[480px]">
+              <p className="text-3xl mb-10">정말 삭제하시겠습니까?</p>
+              <div className="flex justify-between gap-4">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-500 px-6 py-3 rounded-xl text-2xl font-bold w-1/2"
+                >
+                  취소
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="bg-red-600 px-8 py-5 rounded-xl text-2xl font-bold w-1/2"
+                >
+                  확인
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
