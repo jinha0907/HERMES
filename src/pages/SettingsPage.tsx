@@ -120,7 +120,7 @@ const SettingsPage = () => {
           disabled={sending}
           className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-2xl font-bold py-6 rounded-2xl transition"
         >
-          DND 설정 적용
+          설정 적용
         </button>
 
         {/* 뒤로 가기 버튼 */}
