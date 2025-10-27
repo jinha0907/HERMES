@@ -52,7 +52,7 @@ const AlarmDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white flex items-center justify-center text-3xl">
+      <div className="w-[1024px] mx-auto bg-gray-900 text-white flex items-center justify-center text-3xl">
         불러오는 중...
       </div>
     );
@@ -60,7 +60,7 @@ const AlarmDetailPage = () => {
 
   if (!alarm) {
     return (
-      <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-12 flex flex-col items-center justify-center">
+      <div className="w-[1024px] mx-auto bg-gray-900 text-white p-12 flex flex-col items-center justify-center">
         <p className="text-3xl font-bold mb-10">알림을 찾을 수 없습니다</p>
         <Link
           to="/alarms"
@@ -74,7 +74,7 @@ const AlarmDetailPage = () => {
 
   return (
     <div className="h-full min-h-screen bg-gray-900">
-      <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-12 flex flex-col relative">
+      <div className="w-[1024px] mx-auto bg-gray-900 text-white p-12 flex flex-col relative">
         <Toaster
           position="top-center"
           reverseOrder={false}

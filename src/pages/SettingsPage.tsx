@@ -87,7 +87,7 @@ const SettingsPage = () => {
 
   return (
     <div className="h-full min-h-screen bg-gray-900">
-      <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-10 flex flex-col">
+      <div className="w-[1024px] mx-auto bg-gray-900 text-white p-10 flex flex-col">
         <h2 className="text-4xl font-extrabold mb-10 text-center">환경 설정</h2>
 
         {/* 방해금지 설정 */}

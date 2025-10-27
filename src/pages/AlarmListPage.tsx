@@ -85,7 +85,7 @@ const AlarmListPage = () => {
 
   return (
     <div className="h-full min-h-screen bg-gray-900">
-      <div className="w-[1024px] h-[600px] mx-auto bg-gray-900 text-white p-6 flex flex-col relative">
+      <div className="w-[1024px] mx-auto bg-gray-900 text-white p-6 flex flex-col relative">
         {/* ✅ Toast */}
         <Toaster
           position="top-center"
