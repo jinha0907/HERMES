@@ -59,9 +59,11 @@ class Notifier:
                 self.mqtt_client.publish(self.topic_alert, json.dumps(msg))
                 print("[NOTIFY - TRUE]", msg)
                 self.last_published_state = True
+                return
 
         # 비허용 자세가 5초 연속 유지될 때 (한 번만 publish)
         elif self.current_state == "other" and elapsed >= self.disallowed_duration:
             if self.last_published_state != False:
                 print("[NOTIFY - FALSE]", msg)
                 self.last_published_state = False
+                return
