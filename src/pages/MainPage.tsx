@@ -36,7 +36,7 @@ const MainPage = () => {
               to={`/alarms/${alarm.id}`}
               className="block bg-gray-700 rounded-2xl p-5 text-center text-2xl font-semibold shadow-md hover:bg-gray-600 transition"
             >
-              {alarm.title}
+              {alarm?.summary}
             </Link>
           ))
         ) : (
