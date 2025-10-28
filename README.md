@@ -25,17 +25,18 @@ MQTT 통신 – Paho MQTT 기반의 안정적 실시간 데이터 전송
 ======================================================
 [전체 구조]
 com.example.hermes
-├── core
+core
 │   ├── NotificationRelayService.kt   # 알림 수집 및 MQTT 전송
 │   └── MqttKeeperService.kt          # (확장용) MQTT 유지 서비스
-│
+
 ├── net
 │   ├── MqttClient.kt                 # MQTT 연결 관리 및 큐잉 전송
 │   └── NetworkScanner.kt             # 동일 서브넷 내 브로커 탐색
-│
+
+
 ├── ui
 │   └── MainActivity.kt               # 연결 UI 및 상태 표시
-│
+
 └── util
 ├── Masking.kt                    # 개인정보 마스킹
 ├── MessageFilter.kt              # 중요도 필터링
