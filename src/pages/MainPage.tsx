@@ -50,7 +50,7 @@ const MainPage = () => {
         </div>
 
         {/* 하단 영역 */}
-        <div className="grid grid-cols-2 gap-4 flex-none">
+        <div className="mt-auto grid grid-cols-2 gap-4 flex-none">
           {/* 날씨 박스 + 로고 */}
           <div className="flex flex-col items-center justify-center bg-gray-700 rounded-2xl p-6 shadow-lg space-y-6">
             {weatherLoading || !weather ? (
