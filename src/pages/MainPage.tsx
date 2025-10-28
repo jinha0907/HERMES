@@ -25,9 +25,9 @@ const MainPage = () => {
 
   return (
     <div className="h-full min-h-screen bg-gray-900 flex justify-between">
-      <div className="w-[1024px] h-[600px] mx-auto flex flex-col bg-gray-900 text-white p-6">
+      <div className="w-[1024px] mx-auto flex flex-col bg-gray-900 text-white p-6">
         {/* 상단 알림 목록 */}
-        <div className="min-h-[375px] flex flex-col flex-none justify-between mb-2">
+        <div className="min-h-[375px] flex flex-col flex-none space-y-2 mb-3">
           {loading ? (
             <p className="px-4 text-center text-3xl text-gray-400">
               불러오는 중...
@@ -43,9 +43,14 @@ const MainPage = () => {
               </Link>
             ))
           ) : (
-            <p className="text-center text-3xl text-gray-400">
-              등록된 알림이 없습니다.
-            </p>
+            [1, 2].map((num) => (
+              <div
+                key={num}
+                className="block h-[88px] bg-gray-700 rounded-2xl py-3 px-9 text-center text-2xl font-semibold shadow-md hover:bg-gray-600 transition"
+              >
+                {num}번 알림: 현재 수신된 알림이 없습니다.
+              </div>
+            ))
           )}
         </div>
 
