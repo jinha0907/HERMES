@@ -24,7 +24,7 @@ const MainPage = () => {
   }, []);
 
   return (
-    <div className="h-full min-h-screen bg-gray-900">
+    <div className="h-full min-h-screen bg-gray-900 flex justify-between">
       <div className="w-[1024px] mx-auto flex flex-col bg-gray-900 text-white p-6">
         {/* 상단 알림 목록 */}
         <div className="flex flex-col flex-none space-y-4 mb-6">
