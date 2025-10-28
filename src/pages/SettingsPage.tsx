@@ -86,12 +86,12 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="h-full min-h-screen bg-gray-900 overflow:hidden">
+    <div className="h-full min-h-screen bg-gray-900 overflow-hidden">
       <div className="w-[1024px] mx-auto bg-gray-900 text-white p-8 flex flex-col ">
         <h2 className="text-4xl font-extrabold mb-10 text-center">환경 설정</h2>
 
         {/* 방해금지 설정 */}
-        <div className="mb-12">
+        <div className="mb-10">
           <h3 className="text-3xl font-bold mb-4">⏰ 방해금지 설정</h3>
           <p className="text-yellow-400 mb-4 text-xl">
             설정된 시간에는 알림이 전달되지 않습니다
@@ -125,7 +125,7 @@ const SettingsPage = () => {
         </div>
 
         {/* 볼륨 조절 */}
-        <div className="mb-12">
+        <div className="mb-10">
           <h3 className="text-3xl font-bold mb-4">🔊 볼륨 조절</h3>
           {volume !== null ? (
             <>
