@@ -27,7 +27,7 @@ const MainPage = () => {
     <div className="h-full min-h-screen bg-gray-900 flex justify-between">
       <div className="w-[1024px] mx-auto flex flex-col bg-gray-900 text-white p-6">
         {/* 상단 알림 목록 */}
-        <div className="flex flex-col flex-none space-y-4 mb-6">
+        <div className="min-h-[375px] flex flex-col flex-none justify-between mb-3">
           {loading ? (
             <p className="px-4 text-center text-3xl text-gray-400">
               불러오는 중...
@@ -37,7 +37,7 @@ const MainPage = () => {
               <Link
                 key={alarm.id}
                 to={`/alarms/${alarm.id}`}
-                className="block bg-gray-700 rounded-2xl py-5 px-9 text-center text-2xl font-semibold shadow-md hover:bg-gray-600 transition"
+                className="block h-[88px] bg-gray-700 rounded-2xl py-3 px-9 text-center text-2xl font-semibold shadow-md hover:bg-gray-600 transition"
               >
                 {alarm?.summary}
               </Link>
@@ -77,16 +77,16 @@ const MainPage = () => {
           </div>
 
           {/* 환경 설정 + 알림 리스트 */}
-          <div className="flex flex-col justify-between bg-gray-700 rounded-2xl p-6 shadow-lg text-center">
+          <div className="flex flex-col justify-between bg-gray-700 rounded-2xl px-4 py-3 shadow-lg text-center">
             <Link
               to="/settings"
-              className="block w-full py-4 mb-3 bg-gray-400 rounded-2xl text-2xl font-bold hover:bg-gray-500 transition"
+              className="block w-full py-4 bg-gray-400 rounded-2xl text-2xl font-bold hover:bg-gray-500 transition"
             >
               환경 설정
             </Link>
             <Link
               to="/alarms"
-              className="block w-full py-4 mt-3 bg-blue-500 rounded-2xl text-2xl font-bold hover:bg-blue-600 transition"
+              className="block w-full py-4 bg-blue-500 rounded-2xl text-2xl font-bold hover:bg-blue-600 transition"
             >
               알림 리스트
             </Link>
