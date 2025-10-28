@@ -52,7 +52,7 @@ const MainPage = () => {
         {/* 하단 영역 */}
         <div className="mt-auto grid grid-cols-2 gap-4">
           {/* 날씨 박스 + 로고 */}
-          <div className="flex flex-col items-center justify-center bg-gray-700 rounded-2xl p-6 shadow-lg space-y-6">
+          <div className="h-[168px] flex flex-col items-center justify-center bg-gray-700 rounded-2xl p-6 shadow-lg space-y-6">
             {weatherLoading || !weather ? (
               <p className="text-3xl text-gray-400">날씨 불러오는 중…</p>
             ) : (
