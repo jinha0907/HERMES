@@ -27,7 +27,7 @@ const MainPage = () => {
     <div className="h-full min-h-screen bg-gray-900 flex justify-between">
       <div className="w-[1024px] h-[600px] mx-auto flex flex-col bg-gray-900 text-white p-6">
         {/* 상단 알림 목록 */}
-        <div className="min-h-[375px] flex flex-col flex-none justify-between mb-3">
+        <div className="min-h-[375px] flex flex-col flex-none justify-between mb-2">
           {loading ? (
             <p className="px-4 text-center text-3xl text-gray-400">
               불러오는 중...
@@ -44,7 +44,7 @@ const MainPage = () => {
             ))
           ) : (
             <p className="text-center text-3xl text-gray-400">
-              등록된 알림이 없습니다
+              등록된 알림이 없습니다.
             </p>
           )}
         </div>
