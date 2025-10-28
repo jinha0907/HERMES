@@ -25,7 +25,7 @@ const MainPage = () => {
 
   return (
     <div className="h-full min-h-screen bg-gray-900 flex justify-between">
-      <div className="w-[1024px] mx-auto flex flex-col bg-gray-900 text-white p-6">
+      <div className="w-[1024px] h-[600px] mx-auto flex flex-col bg-gray-900 text-white p-6">
         {/* 상단 알림 목록 */}
         <div className="min-h-[375px] flex flex-col flex-none justify-between mb-3">
           {loading ? (
