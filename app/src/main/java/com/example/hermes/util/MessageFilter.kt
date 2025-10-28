@@ -19,8 +19,8 @@ object MessageFilter {
     //의미 없는 단어 -> 의성어/반복음/짧은 반응
     private  val meaninglessTokens = listOf(
         "ㅋㅋ", "ㅎㅎ", "ㅠㅠ", "ㅜㅜ", "ㅇㅋ", "ㅇㅇ", "ㄱㄱ", "ㄴㄴ",
-        "ㅎ", "ㅋ", "굿", "ok", "lol", "hi", "hey", "yes", "no", "응",
-        "ㅅㅂ", "ㅄ", "ㅈㅂ", "ㅠㅜ", "ㅜㅠ", "n", "h", "ㅗ", "ㅗㅗ"
+        "ㅎ", "ㅋ","ㅂ","ㅅ","ㄱ","ㄴ",
+        "ㅅㅂ", "ㅄ", "ㅈㅂ", "ㅠㅜ", "ㅜㅠ", "ㅗ", "ㅗㅗ"
     )
     private val positiveKeywords = listOf(
         "입금", "이체", "결제", "배송", "택배", "도착", "확인",
@@ -28,7 +28,8 @@ object MessageFilter {
         "완료", "약속", "부재", "일정", "마감", "신청", "제출", "방문", "전화", "은행",
         "급하게", "급한", "부탁", "안녕하세요", "올림", "공지", "중요", "감사합니다", "회신",
         "귀하", "고객님", "대상자", "보험", "건강", "암", "검진", "출석", "고소", "변호사","경관",
-        "형사", "민사", "소방", "구급", "응급"
+        "형사", "민사", "소방", "구급", "응급","안내","주문","청구","공지","의료","병원","납입","경찰",
+        "지원", ""
     )
 
     fun importanceScore(text: String): Float {
@@ -62,7 +63,6 @@ object MessageFilter {
     /** 단순히 "무의미한 대화"만 판별할 때 사용 */
     fun isMeaningless(text: String): Boolean {
         val t = text.trim()
-        if (t.isBlank()) return true
         val lower = t.lowercase()
         return meaninglessTokens.any { lower.contains(it) }
     }

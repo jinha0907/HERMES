@@ -39,7 +39,7 @@ object Masking {
     // 범용 계좌번호 의심 패턴: 하이픈 포함 숫자 조합 또는 10~16자리 연속 숫자
     private val genericAccount = Regex("""\b(?:\d{2,4}[- ]?){2,5}\d{2,6}\b""")
     // 보다 엄격한 길이 기반 추가: 연속 숫자 10~16자리 (하이픈 없는 경우)
-    private val longNumeric = Regex("""\b\d{5,30}\b""")
+    private val longNumeric = Regex("""(?<!\d)\d{10,16}(?!\d)""")
 
     fun mask_app(input: String): Boolean {
         val name = input.lowercase()
