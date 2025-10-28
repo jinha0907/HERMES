@@ -43,14 +43,9 @@ const MainPage = () => {
               </Link>
             ))
           ) : (
-            [1, 2].map((num) => (
-              <div
-                key={num}
-                className="block h-[88px] bg-gray-700 rounded-2xl py-3 px-9 text-center text-2xl font-semibold shadow-md hover:bg-gray-600 transition"
-              >
-                {num}번 알림: 현재 수신된 알림이 없습니다.
-              </div>
-            ))
+            <p className="text-center text-3xl text-gray-400">
+              등록된 알림이 없습니다
+            </p>
           )}
         </div>
 
